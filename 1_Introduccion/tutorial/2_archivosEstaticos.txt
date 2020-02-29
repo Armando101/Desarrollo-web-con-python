@@ -1,0 +1,19 @@
+Podemos incluir archivos estáticos, estos son:
+	- CSS
+	- JS
+	- Imágenes
+
+	Para incluirlos los colocamos en el archivo html, para esto creamos una nueva carpeta al nivel de templates, esta nueva carpeta se llamará static y en esta por buenas prácticas creamos otra carpeta llamada CSS, JS e Images.
+
+	Para incluirlos en el html lo hacemos de la siguiente manera:
+
+Para CSS:
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+
+Para JS:
+	<script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+Para imágenes:
+	<img src="{{ url_for('static', filename='images/tiburon.jpeg') }}">
+
+Cabe destacar que en la ruta no hay que colocar static ya que por defecto ahí se buscan los archivos estáticos, en la ruta colocamos dobles llaves de apertura y cierre

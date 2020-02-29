@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import render_template
+from flask import render_template, request
 
 # Declaro una instancia de Flask y le paso como argumento el contexto
 app = Flask(__name__)
@@ -24,6 +24,24 @@ def index():
 
 	# Podemos regresar algo sencillo como un mensaje
 #	return "<h1>Hola mundo desde el servidor de Flask</h1>"
+
+# Parámetros: podemos poner parámetros para evitar tener muchas urls
+# Por defecto toma los parámetros como enteros pero podemos ponerlos de un tipo en específico, los parámetros también tendrán que ser especificados en la función
+@app.route('/usuario/<username>/<int:age>')
+def usuario(username, age):
+	return 'Hola ' + username + " " +str(age)
+
+# Podemos enviar datos al servidor con query strings
+# Necesitamos el módulo request
+# La variable args es un diccionario que recibe los datos que le mandamos desde la url
+# Para enviar datos lo hacemos de la siguiente manera:
+	# localhost:900/datos?nombre=Armando&curso=python_web
+@app.route('/datos')
+def datos():
+	# Si le damos un string vacío indicamos que tome un valor por defecto
+	nombre = request.args.get('nombre', '')
+	curso = request.args.get('curso', '')
+	return "Listado de datos: " + nombre + ", " + curso 
 
 
 if __name__ == '__main__':
