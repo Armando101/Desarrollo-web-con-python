@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Servidor Flask</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+	<h1>Mensaje del archivo base</h1>
+
+	<!-- Colocamos como argumento de la función url_for el nombre de la función asociada a la url-->
+	<a href="{{ url_for('index')}}">Index</a>
+	<a href="{{ url_for('about')}}">About</a>
+
+	{%  block content %}
+	{% endblock %}
+
+</body>
+</html>

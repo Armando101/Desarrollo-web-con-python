@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Servidor Flask</title>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
+
 	<h1>Hola {{ username }}, bienveido al curso de {{ course_name }}</h1>
 	<p>
 		El mensaje se encuentra dentro de un archivo html
@@ -33,5 +29,5 @@
 	<img src="{{ url_for('static', filename='images/tiburon.jpeg') }}">
 
 	<script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
-</body>
-</html>
+
+{% endblock %}

@@ -44,8 +44,30 @@ def datos():
 	return "Listado de datos: " + nombre + ", " + curso 
 
 
+@app.route('/about')
+def about():
+	print('Estamos en el about')
+	return render_template('about.html')
+
+# Esta función es un callback
+# Colocamos el siguiente decorador
+@app.before_request
+def before_request():
+	# Esa función se ejecuta antes de resolver la petición
+	# Nos permite hacer acciones como acceder a una base de datos, acceder a un servidor, etc.
+	# Este print lo podemos ver en la consola
+	print("Antes de la petición")
+
+# Esta función será un callback que se ejecuta después de la petición
+# La función recibe un argumento, este argumento es la respuesta de cada función ejecutada
+@app.after_request
+def after_reques(response):
+	print('Después de la petición')
+	return response
+
+
 if __name__ == '__main__':
 	# Ejecutamos el método run de la instancia app
 	# Podemos indicar el puerto de escucha
-	# Es recomendable poner en True parámetro debug para indicarle al servidor que estamos en la fase de desarrollo
+	# Es recomendable poner en True pax|rámetro debug para indicarle al servidor que estamos en la fase de desarrollo
 	app.run(debug = True, port = 9000)
