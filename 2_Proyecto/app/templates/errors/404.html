@@ -1,0 +1,24 @@
+<!-- Heredamos del archivo base de bootstrap -->
+{% extends 'bootstrap/base.html' %}
+
+<!-- Hacemos uso de los bloques principales -->
+{% block title %}
+	Error 404
+{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+<!-- En este bloque ya podemos usar las clases propias de bootstrap -->
+{% block content %}
+	<div class='container'>
+		<div class="row">
+			<div class="col-md-12">
+				<h2>404 Not found</h2>
+				<p>
+					Lo sentimos, un error ha ocurrido, página no encontrada
+				</p>
+			</div>
+		</div>
+	</div>
+{% endblock %}
