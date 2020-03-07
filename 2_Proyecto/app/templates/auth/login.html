@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% from 'helpers/_forms.html' import render_field %}
+
+{% block container %}
+	<div class="col-md-12 col-md-offset-1">
+		<h3>Login</h3>
+		<form class="" method="post">
+			<!-- envío los tokens para validar las peticiones
+			coloco un input del tipo hidden, esto para que no sea visible al usuario -->
+			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+			<div class="form-group">
+				{{ render_field(form.username, class='form-control', placeholder='username') }}
+			</div>
+	
+			<div class="form-group">
+				{{ render_field(form.password, class='form-control', placeholder='password') }}
+			</div>
+
+			<button type="submit", class="btn btn-primary" name='Login'>
+				Login
+			</button>
+
+		</form>
+	</div>
+{% endblock %}

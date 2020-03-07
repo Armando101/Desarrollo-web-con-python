@@ -1,5 +1,6 @@
 class Config:
-	pass
+	# Llave secrete para generar tokens y autenticar los formularios
+	SECRET_KEY = 'Armando'
 
 # Colocamos las configuraciones necesarias para el servidor
 class DevelopmentConfig(Config):
