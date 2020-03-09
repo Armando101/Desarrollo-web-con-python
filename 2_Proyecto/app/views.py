@@ -6,7 +6,7 @@ from flask import Blueprint
 from flask import render_template, request
 
 # Importo el formulario de LogIn
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
 # Realizamos una instancia
 # El primer argumento es el nombre de nuestro contexto
 # El segundo argumento es el contexto del cual se está creando la instancia
@@ -54,3 +54,8 @@ def login():
 
 	# Le paso como argumento al parámetro form la instancia form
 	return render_template('auth/login.html', title='Login', form=form)
+
+@page.route('/register')
+def register():
+	form = RegisterForm()
+	return render_template('auth/register.html', title='Registro', form=form)
