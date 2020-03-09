@@ -1,6 +1,8 @@
 # Este archivo almacenará los diferentes modelos que vamos a utilizar en el proyecto
 import datetime
-
+# Esta función nos genera un hash para la contraseña
+# pip install wekzeug
+from werkzeug.security import generate_password_hash
 # El punto hace referencia a este módulo
 from . import db
 
@@ -16,12 +18,23 @@ class User(db.Model):
 
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(50), unique=True, nullable=False)
-	password = db.Column(db.String(93), nullable=False)
+	encypted_password = db.Column(db.String(100), nullable=False)
 	email = db.Column(db.String(100), unique=True, nullable=False)
 
 	# Este atributo nos permite saber cuando un registro fue creado
 	# Cada que se cree un nuevo registro se guardará la fecha exacta en la que fue creado.
 	create_at = db.Column(db.DateTime, default=datetime.datetime.now())
+
+	@property
+	def password(self):
+		pass
+
+	# Usamos la propiedad setter para colocar el valor
+	@password.setter
+	def password(self, value):
+		# Pasamos la contraseña en texto plano a la función generate_password_hash
+		self.encypted_password = generate_password_hash(value)
+
 
 	def __str__(self):
 		"""

@@ -51,17 +51,3 @@ def create_app(config):
 		db.create_all()
 
 	return app
-
-
-
-
-
-
-
-
-
-
-
-
-
-

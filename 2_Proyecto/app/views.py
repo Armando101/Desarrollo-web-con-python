@@ -3,7 +3,7 @@
 # Nos vamos a apoyar de la clase Blueprint
 # Esta clase nos permite trabajar con aplicaciones modulables
 from flask import Blueprint
-from flask import render_template, request
+from flask import render_template, request, flash
 
 from .models import User
 # Importo el formulario de LogIn
@@ -66,6 +66,7 @@ def register():
 		if form.validate():
 			# Creo un usuario
 			user = User.create_element(form.username.data, form.password.data, form.email.data)
-			print('Usuario creado de forma exitosa')
+			flash('Usuario creado de forma exitosa')
 			print(user.id)
+			
 	return render_template('auth/register.html', title='Registro', form=form)
