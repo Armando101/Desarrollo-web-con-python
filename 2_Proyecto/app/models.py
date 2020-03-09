@@ -29,3 +29,15 @@ class User(db.Model):
 			Se visualizará su username
 		"""
 		return self.username
+
+	@classmethod
+	# No coloco id ni create_at porque se crean automáticamente
+	def create_element(cls, username, password, email):
+		user = User(username=username, password=password, email=email)
+
+		# Agregamos el usuario a la base de datos
+		db.session.add(user)
+		# Confirmamos los cambios a la base de datos
+		db.session.commit()
+
+		return user

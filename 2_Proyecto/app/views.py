@@ -5,6 +5,7 @@
 from flask import Blueprint
 from flask import render_template, request
 
+from .models import User
 # Importo el formulario de LogIn
 from .forms import LoginForm, RegisterForm
 # Realizamos una instancia
@@ -39,8 +40,8 @@ def index():
 def login():
 	# Creo una instancia del formulario de LoginForm
 	# El formulario se crear con atributos vacíos por defecto
-	# request.form nos permite saber si el usuario envió infomración
-	# De esta manera creo la instancia conesa infomración
+	# request.form nos permite saber si el usuario envió información
+	# De esta manera creo la instancia con dicha infomración
 	form = LoginForm(request.form)
 
 	# Verificamos si la petición fue realizada con el método post
@@ -55,7 +56,16 @@ def login():
 	# Le paso como argumento al parámetro form la instancia form
 	return render_template('auth/login.html', title='Login', form=form)
 
-@page.route('/register')
+@page.route('/register', methods=['GET', 'POST'])
 def register():
-	form = RegisterForm()
+	form = RegisterForm(request.form)
+
+	# Verifico si el usuario envió información
+	if request.method == 'POST':
+		# Si el usuario mandó información compruebo que sea válida
+		if form.validate():
+			# Creo un usuario
+			user = User.create_element(form.username.data, form.password.data, form.email.data)
+			print('Usuario creado de forma exitosa')
+			print(user.id)
 	return render_template('auth/register.html', title='Registro', form=form)
