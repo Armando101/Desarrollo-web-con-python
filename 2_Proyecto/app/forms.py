@@ -79,3 +79,15 @@ class RegisterForm(Form):
 		if User.get_by_email(email.data):
 			raise validators.ValidationError('El email ya se encuentra en uso.')
 
+	# Sobreescribimos la función validate que se encuentra en views.py
+	# Esto para personalizar las validaciones
+	def validate(self):
+		# Si un campo no cumple con por lo menos una validación regresamos false
+		if not Form.validate(self):
+			return False
+
+		if len(self.password.data) < 8:
+			self.password.errors.append('El password es demasiado corto')
+			return False
+
+		return True
