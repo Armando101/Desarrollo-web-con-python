@@ -54,3 +54,17 @@ class User(db.Model):
 		db.session.commit()
 
 		return user
+
+	# Método que nos permite no crear varios usuarios con el mismo username
+	# Si el usuario existe obtenemos una instancia de la clase User
+	# Si el usuario no existe tenemos un none
+	@classmethod
+	def get_by_username(cls, username):
+		return User.query.filter_by(username=username).first()
+
+
+	# Validación de email
+	@classmethod
+	def get_by_email(cls, email):
+		return User.query.filter_by(email=email).first()
+

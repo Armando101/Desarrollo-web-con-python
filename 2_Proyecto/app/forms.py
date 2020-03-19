@@ -2,11 +2,25 @@
 # pip install WTForms
 
 # Importamos la clase forms
-from wtforms import Form
+# La clase HiddenField nos permite ocultar campos al usuario
+from wtforms import Form, HiddenField
 # El siguiente módulo nos permite hacer validaciones a formularios
 from wtforms import validators
 from wtforms import StringField, PasswordField, BooleanField
 from wtforms.fields.html5 import EmailField
+
+from .models import User
+
+# Función de validación
+def nombre_validator(form, field):
+	if field.data == 'nombre':
+		raise validators.ValidationError('EL username nombre no es permitido')
+
+# Esta función nos permite prevenir ataques creando cuentas innecesarias
+# Si algún tipo de bot quiere generar usuarios inválidos hará la petición enviando valores para todos los campos (No sabrá diferenciar entre un campo oculto y uno visible). Al recibir un valor en el campo honeypot, un valor que no se espera por parte de un usuario normal, la validación será inválida.
+def length_honeypot(form, field):
+	if len(field.data) > 0:
+		raise validators.ValidationError('Sólo los humanos pueden completar el registro')
 
 # Esta clase nos permitirá crear un formulario de LogIn
 class LoginForm(Form):
@@ -30,7 +44,8 @@ class LoginForm(Form):
 class RegisterForm(Form):
 	username = StringField('Username', [
 			validators.length(min=4, max=50),
-			validators.Required(message="Ingrese un username")
+			validators.Required(message="Ingrese un username"),
+			nombre_validator
 		])
 	email = EmailField('Email', [
 			validators.length(min=6, max=100),
@@ -52,3 +67,15 @@ class RegisterForm(Form):
 	accept = BooleanField('Acepto términos y condiciones', [
 			validators.DataRequired()
 		])
+
+	honeypot = HiddenField("", [length_honeypot])
+
+	# Este método me permite verificar que los usernames no se repitan
+	def validate_username(self, username):
+		if User.get_by_username(username.data):
+			raise validators.ValidationError('El username ya se encuentra en uso.')
+
+	def validate_email(self, email):
+		if User.get_by_email(email.data):
+			raise validators.ValidationError('El email ya se encuentra en uso.')
+
