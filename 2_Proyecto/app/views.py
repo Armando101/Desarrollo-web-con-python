@@ -5,7 +5,7 @@
 from flask import Blueprint
 from flask import render_template, request, flash, redirect, url_for
 
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required
 from . import login_manager
 from .models import User
 # Importo el formulario de LogIn
@@ -83,3 +83,10 @@ def logout():
 	logout_user()
 	flash('Cerraste sesión exitosamente')
 	return redirect(url_for('.login'))
+
+# Esta URL nos permite listar las tareas de un usuario
+# Para hacer uso de esta URL es necesario estar autenticado
+@page.route('/tasks')
+@login_required
+def tasks():
+	return render_template('task/list.html', title='Tareas')

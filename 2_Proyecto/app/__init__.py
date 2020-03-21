@@ -47,8 +47,12 @@ def create_app(config):
 
 	# Indicamos que el servidor puede utilizar bootstrap
 	bootstrap.init_app(app)
-	
+
 	login_manager.init_app(app)
+	# Indicamos la página a la que se va a redirigir en dado caso que se haga una petición a una página que requiera estar autenticado
+	login_manager.login_view = '.login'
+	login_manager.login_message = 'Ingresa a tu cuenta para acceder'
+	
 	# Indicamos al servidor las rutas que utilizará
 	app.register_blueprint(page)
 
