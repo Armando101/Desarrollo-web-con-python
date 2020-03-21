@@ -3,12 +3,16 @@ import datetime
 # Esta función nos genera un hash para la contraseña
 # pip install wekzeug
 from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash
+
+from flask_login import UserMixin
+
 # El punto hace referencia a este módulo
 from . import db
 
 # Esta clase será la representación de la tabla users
 # Para trabajar la clase como un modelo, tendrá que heredar de models
-class User(db.Model):
+class User(db.Model, UserMixin):
 	# Los atributos son las columnas de la tabla
 	# Definimos el tipo de dato con la función Column
 	# También podemos definir los constraints
@@ -24,6 +28,11 @@ class User(db.Model):
 	# Este atributo nos permite saber cuando un registro fue creado
 	# Cada que se cree un nuevo registro se guardará la fecha exacta en la que fue creado.
 	create_at = db.Column(db.DateTime, default=datetime.datetime.now())
+
+	# Esta función recibe dos passwords
+	# Uno encriptado y el otro en texto plano
+	def verify_password(self, password):
+		return check_password_hash(self.encypted_password, password)
 
 	@property
 	def password(self):
@@ -67,4 +76,9 @@ class User(db.Model):
 	@classmethod
 	def get_by_email(cls, email):
 		return User.query.filter_by(email=email).first()
+	
+	@classmethod
+	def get_by_id(cls, id):
+		return User.query.filter_by(id=id).first()
+
 

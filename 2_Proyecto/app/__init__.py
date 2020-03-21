@@ -13,6 +13,12 @@ app = Flask(__name__)
 # pip install Flask-SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
 
+# Para hacer login de usuarios
+# pip install flask-login
+from flask_login import LoginManager
+
+# Instancia de LoginManager
+login_manager = LoginManager()
 # Creamos una instancia de Bootstrap
 bootstrap = Bootstrap()
 
@@ -41,7 +47,8 @@ def create_app(config):
 
 	# Indicamos que el servidor puede utilizar bootstrap
 	bootstrap.init_app(app)
-
+	
+	login_manager.init_app(app)
 	# Indicamos al servidor las rutas que utilizará
 	app.register_blueprint(page)
 

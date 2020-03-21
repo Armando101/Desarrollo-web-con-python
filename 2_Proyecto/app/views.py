@@ -5,6 +5,8 @@
 from flask import Blueprint
 from flask import render_template, request, flash
 
+from flask_login import login_user
+from . import login_manager
 from .models import User
 # Importo el formulario de LogIn
 from .forms import LoginForm, RegisterForm
@@ -13,11 +15,15 @@ from .forms import LoginForm, RegisterForm
 # El segundo argumento es el contexto del cual se está creando la instancia
 page = Blueprint('page', __name__)
 
+@login_manager.user_loader
+def load_user(id):
+	return User.get_by_id(id)
+
 # Declaramos una función la cual se va a ejecutar en caso de que no se encuentre la página
 # La función recibe un arguento, este es el error
 # Por buenas prácticas regresamos dos valores
 # El primer valor a regresar es lo que queremos retornar
-# El segundo valor es un númoero o código que indique el tipo de error que se generó
+# El segundo valor es un número o código que indique el tipo de error que se generó
 @page.app_errorhandler(404)
 def page_not_found(error):
 	return render_template('errors/404.html'), 404
@@ -47,12 +53,13 @@ def login():
 	# Verificamos si la petición fue realizada con el método post
 	# form.validate nos regresa un booleano, regresa True si todas las validaciones fueron hechas correctamente
 	if request.method == 'POST' and form.validate():
-		# Aquí podemos hacer una consulta a la base dedatos
-		print("Nueva sesión creada!!")
-		# Con el atributo data podemos ver el valor que ingresó el usuario
-		print(form.username.data)
-		print(form.password.data)
-
+		user = User.get_by_username(form.username.data)
+		if user and user.verify_password(form.password.data):
+			login_user(user)
+			flash('Usuario autenticado exitosamente')
+		else:
+			flash('Usuario o contraseña incorrecta')
+			
 	# Le paso como argumento al parámetro form la instancia form
 	return render_template('auth/login.html', title='Login', form=form)
 
