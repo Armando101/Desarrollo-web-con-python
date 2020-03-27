@@ -5,7 +5,7 @@
 from flask import Blueprint
 from flask import render_template, request, flash, redirect, url_for
 
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from . import login_manager
 from .models import User
 # Importo el formulario de LogIn
@@ -44,6 +44,11 @@ def index():
 # El método POST nos permite crear una nueva sesión
 @page.route('/login', methods=['GET', 'POST'])
 def login():
+
+	# Si el usuario ya está autenticado no me muestra esta página
+	if current_user.is_authenticated: # Usuario actual
+		return redirect(url_for('.tasks'))
+
 	# Creo una instancia del formulario de LoginForm
 	# El formulario se crear con atributos vacíos por defecto
 	# request.form nos permite saber si el usuario envió información
@@ -65,6 +70,11 @@ def login():
 
 @page.route('/register', methods=['GET', 'POST'])
 def register():
+
+	# Si el usuario ya está autenticado no me muestra esta página
+	if current_user.is_authenticated: # Usuario actual
+		return redirect(url_for('.tasks'))
+
 	form = RegisterForm(request.form)
 
 	# Verifico si el usuario envió información
@@ -74,7 +84,9 @@ def register():
 			# Creo un usuario
 			user = User.create_element(form.username.data, form.password.data, form.email.data)
 			flash('Usuario creado de forma exitosa')
-			print(user.id)
+			# print(user.id)
+			login_user(user)
+			return redirect(url_for('.tasks'))
 			
 	return render_template('auth/register.html', title='Registro', form=form)
 
